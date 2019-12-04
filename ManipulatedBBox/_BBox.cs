@@ -50,5 +50,10 @@ namespace ManipulatedBBox
         {
             //DefaultStyleKeyProperty.OverrideMetadata(typeof(_BBox), new FrameworkPropertyMetadata(typeof(_BBox)));
         }
+
+        protected override Geometry GetLayoutClip(Size layoutSlotSize)
+        {
+            return ClipToBounds ? base.GetLayoutClip(layoutSlotSize) : null;
+        }
     }
 }

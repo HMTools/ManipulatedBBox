@@ -72,5 +72,10 @@ namespace ManipulatedBBox
             bool selected = System.Windows.Controls.Primitives.Selector.GetIsSelected(this);
             System.Windows.Controls.Primitives.Selector.SetIsSelected(this, !selected);
         }
+
+        protected override Geometry GetLayoutClip(Size layoutSlotSize)
+        {
+            return ClipToBounds ? base.GetLayoutClip(layoutSlotSize) : null;
+        }
     }
 }
