@@ -1,0 +1,84 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace ManipulatedBBox
+{
+    /// <summary>
+    /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
+    ///
+    /// Step 1a) Using this custom control in a XAML file that exists in the current project.
+    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
+    /// to be used:
+    ///
+    ///     xmlns:MyNamespace="clr-namespace:ManipulatedBBox"
+    ///
+    ///
+    /// Step 1b) Using this custom control in a XAML file that exists in a different project.
+    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
+    /// to be used:
+    ///
+    ///     xmlns:MyNamespace="clr-namespace:ManipulatedBBox;assembly=ManipulatedBBox"
+    ///
+    /// You will also need to add a project reference from the project where the XAML file lives
+    /// to this project and Rebuild to avoid compilation errors:
+    ///
+    ///     Right click on the target project in the Solution Explorer and
+    ///     "Add Reference"->"Projects"->[Browse to and select this project]
+    ///
+    ///
+    /// Step 2)
+    /// Go ahead and use your control in the XAML file.
+    ///
+    ///     <MyNamespace:BUC_Manipulated/>
+    ///
+    /// </summary>
+    public class BUC_Manipulated : UserControl, IManipulated
+    {
+        public _BBox box;
+        public Size original;
+
+        static BUC_Manipulated()
+        {
+            //DefaultStyleKeyProperty.OverrideMetadata(typeof(BUC_Manipulated), new FrameworkPropertyMetadata(typeof(BUC_Manipulated)));
+            
+        }
+
+        public BUC_Manipulated(_BBox box)
+        {
+            if(box != null)
+            {
+                set_parent_box(box);
+            }
+            IsHitTestVisible = false;
+            Loaded += BUC_Manipulated_Loaded;
+        }
+
+        public void change_focus()
+        {
+            box.control.change_focus();
+        }
+
+        public virtual void set_parent_box(_BBox box)
+        {
+            this.box = box;
+            this.box.uc = this;
+            this.box.control.Content = this;
+            this.box.control.manipulated = this;
+        }
+
+        private void BUC_Manipulated_Loaded(object sender, RoutedEventArgs e)
+        {
+            original = new Size(this.ActualWidth, this.ActualHeight);
+        }
+    }
+}
