@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WPFLibrary;
 
 namespace ManipulatedBBox
 {
@@ -42,23 +45,33 @@ namespace ManipulatedBBox
     ///     <MyNamespace:ManipulatedContentControl/>
     ///
     /// </summary>
-    public class ManipulatedContentControl : ContentControl
+    public class ManipulatedContentControl : ContentControl, INotifyPropertyChanged
     {
-        public IManipulated manipulated;
+        #region Commands
+        public RelayCommand ChangeFocusCommand { get; private set; }
+        #endregion
+
+        public bool isSelected
+        {
+            get { return (bool)GetValue(isSelectedProperty); }
+            set { SetValue(isSelectedProperty, value); }
+        }
+
+        public static readonly DependencyProperty isSelectedProperty =
+            DependencyProperty.Register("isSelected", typeof(bool), typeof(BBox), new PropertyMetadata(false));
 
         public TransformGroup transformGroup = new TransformGroup();
         public ScaleTransform scaleTransform = new ScaleTransform();
         public SkewTransform skewTransform = new SkewTransform();
         public RotateTransform rotateTransform = new RotateTransform();
         public TranslateTransform translateTransform = new TranslateTransform();
-
         static ManipulatedContentControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ManipulatedContentControl), new FrameworkPropertyMetadata(typeof(ManipulatedContentControl)));
         }
-
         public ManipulatedContentControl()
         {
+            AddCommands();
             rotateTransform.Angle = 0;
             transformGroup.Children.Add(scaleTransform);
             transformGroup.Children.Add(skewTransform);
@@ -66,16 +79,28 @@ namespace ManipulatedBBox
             transformGroup.Children.Add(translateTransform);
             this.RenderTransform = transformGroup;
         }
-
-        public void change_focus()
+        public override void OnApplyTemplate()
         {
-            bool selected = System.Windows.Controls.Primitives.Selector.GetIsSelected(this);
-            System.Windows.Controls.Primitives.Selector.SetIsSelected(this, !selected);
+            base.OnApplyTemplate();
+        }
+        private void AddCommands()
+        {
+            ChangeFocusCommand = new RelayCommand(o => { isSelected = !isSelected; OnPropertyChanged("isSelected"); });
         }
 
         protected override Geometry GetLayoutClip(Size layoutSlotSize)
         {
             return ClipToBounds ? base.GetLayoutClip(layoutSlotSize) : null;
         }
+
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+        #endregion
+
     }
 }

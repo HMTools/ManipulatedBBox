@@ -21,10 +21,35 @@ namespace ManipulatedBBox.Adorners
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             double d = (double)value;
-            return Math.Round(d /3*4 , 2);
+            double ratio = 1;
+            if(parameter != null)
+            {
+                var strParam = parameter as string;
+                if (strParam != null)
+                    ratio = double.Parse(strParam);
+                else
+                ratio = (double)parameter;
+            }
+            return Math.Round(d * ratio, 2);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class DoubleAndRatioFormatConverter : IMultiValueConverter
+    {
+
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            double d = (double)values[0];
+            double ratio = (double)values[1];
+            return Math.Round(d / ratio, 2).ToString();
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             return null;
         }

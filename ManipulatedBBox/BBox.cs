@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -39,46 +41,47 @@ namespace ManipulatedBBox
     /// Step 2)
     /// Go ahead and use your control in the XAML file.
     ///
-    ///     <MyNamespace:BUC_Manipulated/>
+    ///     <MyNamespace:BBox/>
     ///
     /// </summary>
-    public class BUC_Manipulated : UserControl, IManipulated
+    public class BBox : ContentControl
     {
-        public _BBox box;
-        public Size original;
-
-        static BUC_Manipulated()
+        
+        #region Dependency Properties
+        public double SizeRatio
         {
-            //DefaultStyleKeyProperty.OverrideMetadata(typeof(BUC_Manipulated), new FrameworkPropertyMetadata(typeof(BUC_Manipulated)));
-            
+            get { return (double)GetValue(SizeRatioProperty); }
+            set { SetValue(SizeRatioProperty, value); }
         }
 
-        public BUC_Manipulated(_BBox box)
-        {
-            if(box != null)
-            {
-                set_parent_box(box);
-            }
-            IsHitTestVisible = false;
-            Loaded += BUC_Manipulated_Loaded;
-        }
+        public static readonly DependencyProperty SizeRatioProperty =
+            DependencyProperty.Register("SizeRatio", typeof(double), typeof(BBox), new PropertyMetadata(1.0));
 
-        public void change_focus()
+        #endregion
+        #region Fields
+        private ManipulatedContentControl control;
+        #endregion
+        #region Constructor
+        static BBox()
         {
-            box.control.change_focus();
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(BBox), new FrameworkPropertyMetadata(typeof(BBox)));
         }
+        #endregion
 
-        public virtual void set_parent_box(_BBox box)
-        {
-            this.box = box;
-            this.box.uc = this;
-            this.box.control.Content = this;
-            this.box.control.manipulated = this;
-        }
+        #region Methods
 
-        private void BUC_Manipulated_Loaded(object sender, RoutedEventArgs e)
+        protected override Geometry GetLayoutClip(Size layoutSlotSize)
         {
-            original = new Size(this.ActualWidth, this.ActualHeight);
+            return ClipToBounds ? base.GetLayoutClip(layoutSlotSize) : null;
         }
+        #endregion
+
+        #region Enums
+        public enum ContainerTypes
+        {
+            Grid,
+            Canvas
+        }
+        #endregion
     }
 }

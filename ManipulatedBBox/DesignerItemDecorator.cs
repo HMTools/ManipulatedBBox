@@ -44,7 +44,6 @@ namespace ManipulatedBBox
                 if (adornerLayer != null)
                 {
                     ContentControl designerItem = this.DataContext as ContentControl;
-                    Canvas canvas = VisualTreeHelper.GetParent(designerItem) as Canvas;
                     this.adorner = new Adorners.ResizeRotateAdorner(designerItem);
                     adornerLayer.Add(this.adorner);
 
