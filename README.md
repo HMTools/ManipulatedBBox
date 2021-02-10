@@ -37,14 +37,15 @@ Install-Package HMTools.ManipulatedBBox
 
 ## ScreenShots
 ### Easy Activate
-![](ReadmeResources/ShowBBox.gif)
+![ShowBBox](https://user-images.githubusercontent.com/42064794/107525655-bab0b300-6bbf-11eb-9b8a-dd8d1888d9b9.gif)
+
 
 ### Drag And Drop
-![](ReadmeResources/DragAndDropBBox.gif)
+![DragAndDropBBox](https://user-images.githubusercontent.com/42064794/107525801-df0c8f80-6bbf-11eb-9bfe-11aac6c7877e.gif)
 
 ### Rotate
-![](ReadmeResources/RotateBBox.gif)
+![RotateBBox](https://user-images.githubusercontent.com/42064794/107525846-eb90e800-6bbf-11eb-8a51-06e2ca61e3cc.gif)
 
 ### Resize
-![](ReadmeResources/CornersResizeBBox.gif)
-![](ReadmeResources/SidesResizeBBox.gif)
+![CornersResizeBBox](https://user-images.githubusercontent.com/42064794/107525740-d0be7380-6bbf-11eb-9b91-6c89d77b1096.gif)
+![SidesResizeBBox](https://user-images.githubusercontent.com/42064794/107525906-f9df0400-6bbf-11eb-80b7-10120fc9404c.gif)
